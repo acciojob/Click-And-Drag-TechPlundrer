@@ -1,31 +1,32 @@
 
-  const items = document.querySelectorAll('.item');
+  const container = document.querySelector('.items');
   let draggedItem = null;
 
-  items.forEach(item => {
-    item.addEventListener('dragstart', (e) => {
-      draggedItem = item;
-      item.classList.add('dragging');
-      e.dataTransfer.effectAllowed = 'move';
-    });
+  container.addEventListener('dragstart', (e) => {
+    if (!e.target.classList.contains('item')) return;
 
-    item.addEventListener('dragend', () => {
-      item.classList.remove('dragging');
-      draggedItem = null;
-    });
-
-    item.addEventListener('dragover', (e) => {
-      e.preventDefault(); // REQUIRED for drop to fire
-    });
-
-    item.addEventListener('drop', (e) => {
-      e.preventDefault();
-      if (!draggedItem || draggedItem === item) return;
-
-      const container = item.parentNode;
-      container.insertBefore(draggedItem, item.nextSibling);
-    });
+    draggedItem = e.target;
+    e.dataTransfer.setData('text/plain', ''); // REQUIRED FOR CYPRESS
+    e.dataTransfer.effectAllowed = 'move';
   });
+
+  container.addEventListener('dragover', (e) => {
+    e.preventDefault(); // REQUIRED
+  });
+
+  container.addEventListener('drop', (e) => {
+    e.preventDefault();
+
+    const target = e.target.closest('.item');
+    if (!draggedItem || !target || draggedItem === target) return;
+
+    container.insertBefore(draggedItem, target.nextSibling);
+  });
+
+  container.addEventListener('dragend', () => {
+    draggedItem = null;
+  });
+
 
 
 
