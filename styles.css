@@ -69,21 +69,4 @@ body {
 .item:nth-child(even) { transform: scaleX(1.31) rotateY(40deg); }
 .item:nth-child(odd) { transform: scaleX(1.31) rotateY(-40deg); }
 
-.container {
-  width: 400px;
-  min-height: 200px;
-  border: 2px solid #333;
-  padding: 10px;
-}
 
-.cube {
-  padding: 20px;
-  margin-bottom: 10px;
-  background: steelblue;
-  color: white;
-  cursor: grab;
-}
-
-.cube.dragging {
-  opacity: 0.5;
-}
