@@ -1,4 +1,4 @@
-<script>
+
   const items = document.querySelectorAll('.item');
   let draggedItem = null;
 
@@ -26,6 +26,6 @@
       container.insertBefore(draggedItem, item.nextSibling);
     });
   });
-</script>
+
 
 
