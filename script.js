@@ -1,27 +1,31 @@
-
-  const cubes = document.querySelectorAll('.cube');
+<script>
+  const items = document.querySelectorAll('.item');
   let draggedItem = null;
 
-  cubes.forEach(cube => {
-    cube.addEventListener('dragstart', () => {
-      draggedItem = cube;
-      cube.classList.add('dragging');
+  items.forEach(item => {
+    item.addEventListener('dragstart', (e) => {
+      draggedItem = item;
+      item.classList.add('dragging');
+      e.dataTransfer.effectAllowed = 'move';
     });
 
-    cube.addEventListener('dragend', () => {
-      cube.classList.remove('dragging');
+    item.addEventListener('dragend', () => {
+      item.classList.remove('dragging');
       draggedItem = null;
     });
 
-    cube.addEventListener('dragover', (e) => {
-      e.preventDefault();
+    item.addEventListener('dragover', (e) => {
+      e.preventDefault(); // REQUIRED for drop to fire
     });
 
-    cube.addEventListener('drop', (e) => {
+    item.addEventListener('drop', (e) => {
       e.preventDefault();
-      if (draggedItem && draggedItem !== cube) {
-        cube.parentNode.insertBefore(draggedItem, cube.nextSibling);
-      }
+      if (!draggedItem || draggedItem === item) return;
+
+      const container = item.parentNode;
+      container.insertBefore(draggedItem, item.nextSibling);
     });
   });
+</script>
+
 
