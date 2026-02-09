@@ -6,12 +6,12 @@
     if (!e.target.classList.contains('item')) return;
 
     draggedItem = e.target;
-    e.dataTransfer.setData('text/plain', ''); // REQUIRED FOR CYPRESS
+    e.dataTransfer.setData('text/plain', ''); 
     e.dataTransfer.effectAllowed = 'move';
   });
 
   container.addEventListener('dragover', (e) => {
-    e.preventDefault(); // REQUIRED
+    e.preventDefault(); 
   });
 
   container.addEventListener('drop', (e) => {
