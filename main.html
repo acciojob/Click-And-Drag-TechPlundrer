@@ -35,43 +35,36 @@
   </div>
 
 <script>
-const container = document.querySelector('.items');
-let draggedItem = null;
-let startX = 0;
+const slider = document.querySelector('.items');
 
-container.addEventListener('mousedown', function(e) {
-  if (!e.target.classList.contains('item')) return;
+let isDown = false;
+let startX;
+let scrollLeft;
 
-  draggedItem = e.target;
-  startX = e.clientX;
-
-  document.addEventListener('mousemove', onMouseMove);
-  document.addEventListener('mouseup', onMouseUp);
+slider.addEventListener('mousedown', function(e) {
+  isDown = true;
+  startX = e.pageX - slider.offsetLeft;
+  scrollLeft = slider.scrollLeft;
 });
 
-function onMouseMove(e) {
-  if (!draggedItem) return;
+slider.addEventListener('mouseleave', function() {
+  isDown = false;
+});
 
-  const items = [...container.querySelectorAll('.item')];
+slider.addEventListener('mouseup', function() {
+  isDown = false;
+});
 
-  items.forEach(function(item) {
-    const box = item.getBoundingClientRect();
+slider.addEventListener('mousemove', function(e) {
+  if (!isDown) return;
 
-    if (
-      e.clientX > box.left &&
-      e.clientX < box.right &&
-      item !== draggedItem
-    ) {
-      container.insertBefore(draggedItem, item);
-    }
-  });
-}
+  e.preventDefault();
 
-function onMouseUp() {
-  document.removeEventListener('mousemove', onMouseMove);
-  document.removeEventListener('mouseup', onMouseUp);
-  draggedItem = null;
-}
+  const x = e.pageX - slider.offsetLeft;
+  const walk = x - startX;
+
+  slider.scrollLeft = scrollLeft - walk;
+});
 </script>
 
 	
