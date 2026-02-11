@@ -35,59 +35,43 @@
   </div>
 
 <script>
-
 const container = document.querySelector('.items');
 let draggedItem = null;
+let startX = 0;
 
-container.addEventListener('dragstart', function(e) {
+container.addEventListener('mousedown', function(e) {
   if (!e.target.classList.contains('item')) return;
 
   draggedItem = e.target;
-  e.target.classList.add('dragging');
+  startX = e.clientX;
+
+  document.addEventListener('mousemove', onMouseMove);
+  document.addEventListener('mouseup', onMouseUp);
 });
 
-container.addEventListener('dragend', function(e) {
-  if (!e.target.classList.contains('item')) return;
+function onMouseMove(e) {
+  if (!draggedItem) return;
 
-  e.target.classList.remove('dragging');
-  draggedItem = null;
-});
+  const items = [...container.querySelectorAll('.item')];
 
-container.addEventListener('dragover', function(e) {
-  e.preventDefault();
+  items.forEach(function(item) {
+    const box = item.getBoundingClientRect();
 
-  const afterElement = getDragAfterElement(container, e.clientX);
-  const dragging = document.querySelector('.dragging');
-
-  if (!dragging) return;
-
-  if (afterElement == null) {
-    container.appendChild(dragging);
-  } else {
-    container.insertBefore(dragging, afterElement);
-  }
-});
-
-function getDragAfterElement(container, x) {
-  const elements = [...container.querySelectorAll('.item:not(.dragging)')];
-
-  let closest = null;
-  let closestOffset = Number.NEGATIVE_INFINITY;
-
-  elements.forEach(function(child) {
-    const box = child.getBoundingClientRect();
-    const offset = x - box.left - box.width / 2;
-
-    if (offset < 0 && offset > closestOffset) {
-      closestOffset = offset;
-      closest = child;
+    if (
+      e.clientX > box.left &&
+      e.clientX < box.right &&
+      item !== draggedItem
+    ) {
+      container.insertBefore(draggedItem, item);
     }
   });
-
-  return closest;
 }
 
-
+function onMouseUp() {
+  document.removeEventListener('mousemove', onMouseMove);
+  document.removeEventListener('mouseup', onMouseUp);
+  draggedItem = null;
+}
 </script>
 
 	
